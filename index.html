@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>暑期时间账单</title>
+    <link href="https://fonts.googleapis.com/css2?family=Ma+Shan+Zheng&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+    <style>
+    :root {
+            --primary: #5b8cff;
+            --success: #67c23a;
+            --warning: #e6a23c;
+            --danger: #f56c6c;
+            --text: #303133;
+            --border: #ebeef5;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        body {
+            font-family: 'Noto Sans SC', sans-serif;
+            background: linear-gradient(135deg, #f5f7fa 0%, #e4e8f0 100%);
+            color: var(--text);
+            line-height: 1.6;
+            padding: 20px;
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 16px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, var(--primary) 0%, #409eff 100%);
+            color: white;
+            padding: 24px;
+            text-align: center;
+            position: relative;
+        }
+        .header h1 {
+            font-family: 'Ma Shan Zheng', cursive;
+            font-size: 28px;
+            margin-bottom: 8px;
+            letter-spacing: 2px;
+        }
+        .header .date {
+            font-size: 16px;
+            margin-bottom: 8px;
+            opacity: 0.9;
+        }
+        .header p {
+            opacity: 0.9;
+            font-size: 14px;
+        }
+        .progress-bar {
+            height: 6px;
+            background: rgba(255,255,255,0.3);
+            margin-top: 20px;
+            border-radius: 3px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: white;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .schedule {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        .schedule th {
+            background-color: #f8fafc;
+            padding: 14px 16px;
+            text-align: center;
+            font-weight: 500;
+            color: #606266;
+            border-bottom: 1px solid var(--border);
+        }
+        .schedule td {
+            padding: 16px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: middle;
+            text-align: center;
+        }
+        .task-col {
+            text-align: left;
+        }
+        .tips-col {
+            color: #606266;
+            font-size: 14px;
+            text-align: left;
+        }
+        .checkbox {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 2px solid var(--border);
+            border-radius: 4px;
+            position: relative;
+            cursor: pointer;
+            margin-right: 8px;
+            vertical-align: middle;
+        }
+        .checkbox.checked {
+            background-color: var(--success);
+            border-color: var(--success);
+        }
+        .checkbox.checked::after {
+            content: "\2713";
+            position: absolute;
+            color: white;
+            font-size: 14px;
+            left: 2px;
+            top: -1px;
+        }
+        .task-tag {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 12px;
+            margin-left: 8px;
+            background: #ecf5ff;
+            color: var(--primary);
+        }
+        .footer {
+            padding: 20px;
+            text-align: center;
+            background: #f8fafc;
+            border-top: 1px solid var(--border);
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 10px 24px;
+            border-radius: 20px;
+            font-size: 14px;
+            cursor: pointer;
+            transition: all 0.3s;
+            box-shadow: 0 2px 12px rgba(91, 140, 255, 0.3);
+        }
+        .btn:hover {
+            background: #409eff;
+            transform: translateY(-2px);
+        }
+        .btn-reset {
+            background: var(--warning);
+            box-shadow: 0 2px 12px rgba(230, 162, 60, 0.3);
+        }
+        .btn-reset:hover {
+            background: #e6a23c;
+        }
+        .btn-clear {
+            background: var(--danger);
+            box-shadow: 0 2px 12px rgba(245, 108, 108, 0.3);
+        }
+        .btn-clear:hover {
+            background: #f56c6c;
+        }
+        @media print {
+            .footer {
+                display: none !important;
+            }
+        }
+        .history-panel {
+            padding: 15px 20px;
+            background: white;
+            border-top: 1px solid #f0f0f0;
+            margin-top: 10px;
+        }
+
+        .history-title {
+            font-size: 16px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 12px;
+            padding-left: 8px;
+        }
+
+        .history-content {
+            padding-left: 20px;
+        }
+
+        .history-item {
+            padding: 6px 0;
+            font-size: 14px;
+            color: #555;
+            line-height: 1.6;
+            border-bottom: 1px dashed #eaeaea;
+            padding-left: 8px;
+        }
+
+        .history-item:last-child {
+            border-bottom: none;
+        }
+    </style>
+</head>
+<body>
+ <div class="container">
+        <div class="header">
+            <h1>时间账单</h1>
+            <div class="date" id="current-date">2023年8月1日 星期二</div>
+            <p>每日任务追踪 · 未完成任务自动转移</p>
+            <div class="progress-bar">
+                <div class="progress-fill" id="progress"></div>
+            </div>
+        </div>
+
+        <table class="schedule">
+            <thead>
+                <tr>
+                    <th>活动内容</th>
+                    <th>时长</th>
+                    <th>执行要点</th>
+                    <th>完成</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- 上午学习 -->
+                <tr>
+                    <td class="task-col">钢琴练习</td>
+                    <td class="duration-col">30min</td>
+                    <td class="tips-col">使用计时器分段练习</td>
+                    <td><div class="checkbox" data-task="piano"></div></td>
+                </tr>
+                <tr>
+                    <td class="task-col">古诗背诵，anki复习</td>
+                    <td class="duration-col">20min</td>
+                    <td class="tips-col">结合画面联想记忆</td>
+                    <td><div class="checkbox" data-task="poem"></div></td>
+                </tr>
+                <tr>
+                    <td class="task-col">KET听力复述</td>
+                    <td class="duration-col">30min</td>
+                    <td class="tips-col">先盲听→跟读→自主复述</td>
+                    <td><div class="checkbox" data-task="ket"></div></td>
+                </tr>
+                <tr>
+                    <td class="task-col">RAZ精读</td>
+                    <td class="duration-col">30min</td>
+                    <td class="tips-col">记忆新词，课后练习</td>
+                    <td><div class="checkbox" data-task="raz"></div></td>
+                </tr>
+                
+                <!-- 下午学习 -->
+                <tr>
+                    <td class="task-col">泛读</td>
+                    <td class="duration-col">30min</td>
+                    <td class="tips-col">书虫</td>
+                    <td><div class="checkbox" data-task="reading"></div></td>
+                </tr>
+                <tr>
+                    <td class="task-col">西游记 <span class="task-tag">每周2章</span></td>
+                    <td class="duration-col">30min</td>
+                    <td class="tips-col">绘制人物关系图</td>
+                    <td><div class="checkbox" data-task="journey"></div></td>
+                </tr>
+                <tr>
+                    <td class="task-col">趣味数学</td>
+                    <td class="duration-col">30min</td>
+                    <td class="tips-col">打卡60天</td>
+                    <td><div class="checkbox" data-task="math"></div></td>
+                </tr>
+                
+                <!-- 暑假作业 -->
+                <tr>
+                    <td class="task-col">运动（跆拳道/羽毛球）</td>
+                    <td class="duration-col">30min</td>
+                    <td class="tips-col">每日体能训练</td>
+                    <td><div class="checkbox" data-task="sport"></div></td>
+                </tr>
+                <tr>
+                    <td class="task-col">练字</td>
+                    <td class="duration-col">30min</td>
+                    <td class="tips-col">唐诗3首</td>
+                    <td><div class="checkbox" data-task="writing"></div></td>
+                </tr>
+                <tr>
+                    <td class="task-col">计算</td>
+                    <td class="duration-col">30min</td>
+                    <td class="tips-col">数学计算练习</td>
+                    <td><div class="checkbox" data-task="calculation"></div></td>
+                </tr>
+                <tr>
+                    <td class="task-col">读民间故事</td>
+                    <td class="duration-col">30min</td>
+                    <td class="tips-col">4个小故事</td>
+                    <td><div class="checkbox" data-task="folk-tales"></div></td>
+                </tr>
+            </tbody>
+        </table>
+
+       <div class="history-panel" id="history-panel">
+    <div class="history-title">历史记录</div>
+    <div id="history-list" class="history-content"></div>
+</div>
+
+        <div class="footer">
+            <button class="btn btn-reset" id="reset-btn">结束今日计划</button>
+            <button class="btn btn-clear" id="clear-btn">重置所有记录</button>
+            <button class="btn" id="print-btn">打印账单</button>
+        </div>
+    </div>
+
+    <script>
+        // 初始化日期显示
+        function updateCurrentDate() {
+            const now = new Date();
+            const options = { year: 'numeric', month: 'long', day: 'numeric', weekday: 'long' };
+            document.getElementById('current-date').textContent = now.toLocaleDateString('zh-CN', options);
+            return now;
+        }
+        
+        const currentDate = updateCurrentDate();
+        const todayKey = currentDate.toISOString().split('T')[0];
+
+        // 初始化任务状态
+        function initTasks() {
+            const savedData = localStorage.getItem('timeBillData');
+            let data = savedData ? JSON.parse(savedData) : {};
+            
+            // 初始化当天数据
+            if (!data[todayKey]) {
+                data[todayKey] = {
+                    date: currentDate.toISOString(),
+                    completed: {},
+                    carriedOver: []
+                };
+            }
+            
+            // 加载未完成的任务（从前一天转移过来的）
+            const yesterday = new Date(currentDate);
+            yesterday.setDate(yesterday.getDate() - 1);
+            const yesterdayKey = yesterday.toISOString().split('T')[0];
+            
+            if (data[yesterdayKey] && data[yesterdayKey].carriedOver.length > 0) {
+                const carriedTasks = data[yesterdayKey].carriedOver;
+                alert(`昨日有 ${carriedTasks.length} 项未完成任务已添加到今日：\n${carriedTasks.join('、')}`);
+                
+                // 标记为已转移
+                data[yesterdayKey].carriedOver = [];
+                localStorage.setItem('timeBillData', JSON.stringify(data));
+            }
+            
+            // 设置复选框状态
+            document.querySelectorAll('.checkbox').forEach(checkbox => {
+                const taskId = checkbox.getAttribute('data-task');
+                checkbox.classList.toggle('checked', data[todayKey]?.completed[taskId] === true);
+                
+                checkbox.addEventListener('click', function() {
+                    this.classList.toggle('checked');
+                    updateTaskStatus(taskId, this.classList.contains('checked'));
+                    updateProgress();
+                });
+            });
+            
+            updateProgress();
+            loadHistory();
+        }
+
+        // 更新任务状态
+        function updateTaskStatus(taskId, isCompleted) {
+            const savedData = localStorage.getItem('timeBillData');
+            let data = savedData ? JSON.parse(savedData) : {};
+            
+            if (!data[todayKey]) {
+                data[todayKey] = {
+                    date: currentDate.toISOString(),
+                    completed: {},
+                    carriedOver: []
+                };
+            }
+            
+            data[todayKey].completed[taskId] = isCompleted;
+            localStorage.setItem('timeBillData', JSON.stringify(data));
+        }
+
+        // 更新进度条
+        function updateProgress() {
+            const total = document.querySelectorAll('.checkbox').length;
+            const completed = document.querySelectorAll('.checkbox.checked').length;
+            const percentage = Math.round((completed / total) * 100);
+            
+            document.getElementById('progress').style.width = percentage + '%';
+        }
+
+        // 加载历史记录
+        function loadHistory() {
+            const savedData = localStorage.getItem('timeBillData');
+            const data = savedData ? JSON.parse(savedData) : {};
+            const historyList = document.getElementById('history-list');
+            historyList.innerHTML = '';
+            
+            // 按日期排序（最近7天）
+            const dates = Object.keys(data).sort().reverse().slice(0, 7);
+            
+            if (dates.length === 0) {
+                historyList.innerHTML = '<div class="history-item">暂无历史记录</div>';
+                return;
+            }
+            
+            dates.forEach(dateKey => {
+                const dateData = data[dateKey];
+                const date = new Date(dateData.date);
+                const dateStr = date.toLocaleDateString('zh-CN', {month: 'long', day: 'numeric'});
+                
+                const completedTasks = Object.keys(dateData.completed).filter(k => dateData.completed[k]);
+                const incompleteTasks = Object.keys(dateData.completed).filter(k => !dateData.completed[k]);
+                
+                const item = document.createElement('div');
+                item.className = 'history-item';
+                item.innerHTML = `
+                    <strong>${dateStr}</strong>：
+                    ${completedTasks.length}项完成，
+                    ${incompleteTasks.length}项未完成
+                    ${dateData.carriedOver.length > 0 ? `（${dateData.carriedOver.length}项已转移）` : ''}
+                `;
+                historyList.appendChild(item);
+            });
+        }
+
+        // 重置任务
+        document.getElementById('reset-btn').addEventListener('click', function() {
+            if (confirm('确定要结束今日计划吗？未完成的任务将自动添加到明日计划中。')) {
+                const savedData = localStorage.getItem('timeBillData');
+                let data = savedData ? JSON.parse(savedData) : {};
+                
+                // 收集未完成任务
+                const incompleteTasks = [];
+                document.querySelectorAll('.checkbox:not(.checked)').forEach(checkbox => {
+                    incompleteTasks.push(checkbox.getAttribute('data-task'));
+                });
+                
+                // 更新数据
+                if (!data[todayKey]) {
+                    data[todayKey] = {
+                        date: currentDate.toISOString(),
+                        completed: {},
+                        carriedOver: []
+                    };
+                }
+                
+                // 标记今日完成状态
+                document.querySelectorAll('.checkbox').forEach(checkbox => {
+                    const taskId = checkbox.getAttribute('data-task');
+                    data[todayKey].completed[taskId] = checkbox.classList.contains('checked');
+                });
+                
+                // 设置未完成任务到明日
+                const tomorrow = new Date(currentDate);
+                tomorrow.setDate(tomorrow.getDate() + 1);
+                const tomorrowKey = tomorrow.toISOString().split('T')[0];
+                
+                if (!data[tomorrowKey]) {
+                    data[tomorrowKey] = {
+                        date: tomorrow.toISOString(),
+                        completed: {},
+                        carriedOver: incompleteTasks
+                    };
+                } else {
+                    // 合并已存在的转移任务
+                    data[tomorrowKey].carriedOver = [...new Set([...data[tomorrowKey].carriedOver, ...incompleteTasks])];
+                }
+                
+                localStorage.setItem('timeBillData', JSON.stringify(data));
+                alert(`今日计划已结束，${incompleteTasks.length}项未完成任务已添加到明日计划`);
+                loadHistory();
+            }
+        });
+
+        // 清空所有历史记录
+        document.getElementById('clear-btn').addEventListener('click', function() {
+            if (confirm('确定要清空所有历史记录吗？此操作不可恢复！')) {
+                localStorage.removeItem('timeBillData');
+                alert('所有历史记录已清空');
+                
+                // 重置当前日期的任务状态
+                document.querySelectorAll('.checkbox').forEach(checkbox => {
+                    checkbox.classList.remove('checked');
+                });
+                updateProgress();
+                loadHistory();
+            }
+        });
+
+        // 打印功能
+        document.getElementById('print-btn').addEventListener('click', function() {
+            window.print();
+        });
+
+        // 初始化
+        initTasks();
+    </script>
+</body>
+</html>
