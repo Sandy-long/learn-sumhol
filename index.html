@@ -207,7 +207,7 @@
 <body>
  <div class="container">
         <div class="header">
-            <h1>时间账单</h1>
+            <h1>学习账单</h1>
             <div class="date" id="current-date">2023年8月1日 星期二</div>
             <p>每日任务追踪 · 未完成任务自动转移</p>
             <div class="progress-bar">
@@ -226,30 +226,33 @@
             </thead>
             <tbody>
                 <!-- 上午学习 -->
+				 <tr>
+                    <td class="task-col">RAZ精读1篇</td>
+                    <td class="duration-col">30min</td>
+                    <td class="tips-col">纠正发音、复述、课后练习</td>
+                    <td><div class="checkbox" data-task="raz"></div></td>
+                </tr>
                 <tr>
                     <td class="task-col">钢琴练习</td>
                     <td class="duration-col">30min</td>
-                    <td class="tips-col">使用计时器分段练习</td>
+                    <td class="tips-col">使用小叶子分段练习</td>
                     <td><div class="checkbox" data-task="piano"></div></td>
                 </tr>
                 <tr>
-                    <td class="task-col">古诗背诵，anki复习</td>
-                    <td class="duration-col">20min</td>
-                    <td class="tips-col">结合画面联想记忆</td>
-                    <td><div class="checkbox" data-task="poem"></div></td>
+                   <td class="task-col">西游记 <span class="task-tag">每天15页</span></td>
+<td class="duration-col">25min</td>
+<td class="tips-col">
+    <a href="https://sandy-long.github.io/learn-c/" target="_blank" class="draw-link">绘制人物关系图</a>
+</td>
+<td><div class="checkbox" data-task="journey"></div></td>
                 </tr>
                 <tr>
-                    <td class="task-col">KET听力复述</td>
-                    <td class="duration-col">30min</td>
-                    <td class="tips-col">先盲听→跟读→自主复述</td>
+                    <td class="task-col">KET听力</td>
+                    <td class="duration-col">15min</td>
+                    <td class="tips-col">3篇/天</td>
                     <td><div class="checkbox" data-task="ket"></div></td>
                 </tr>
-                <tr>
-                    <td class="task-col">RAZ精读</td>
-                    <td class="duration-col">30min</td>
-                    <td class="tips-col">记忆新词，课后练习</td>
-                    <td><div class="checkbox" data-task="raz"></div></td>
-                </tr>
+               
                 
                 <!-- 下午学习 -->
                 <tr>
@@ -258,44 +261,23 @@
                     <td class="tips-col">书虫</td>
                     <td><div class="checkbox" data-task="reading"></div></td>
                 </tr>
-                <tr>
-                   <td class="task-col">西游记 <span class="task-tag">每周2章</span></td>
-<td class="duration-col">30min</td>
-<td class="tips-col">
-    <a href="https://sandy-long.github.io/learn-c/" target="_blank" class="draw-link">绘制人物关系图</a>
-</td>
-<td><div class="checkbox" data-task="journey"></div></td>
-                </tr>
+               
                 <tr>
                     <td class="task-col">趣味数学</td>
                     <td class="duration-col">30min</td>
                     <td class="tips-col">打卡60天</td>
                     <td><div class="checkbox" data-task="math"></div></td>
                 </tr>
-                
-                <!-- 暑假作业 -->
-                <tr>
-                    <td class="task-col">运动（跆拳道/羽毛球）</td>
-                    <td class="duration-col">30min</td>
-                    <td class="tips-col">每日体能训练</td>
-                    <td><div class="checkbox" data-task="sport"></div></td>
+                 <tr>
+                    <td class="task-col">1首古诗背诵，anki复习</td>
+                    <td class="duration-col">15min</td>
+                    <td class="tips-col">结合画面联想记忆</td>
+                    <td><div class="checkbox" data-task="poem"></div></td>
                 </tr>
                 <tr>
-                    <td class="task-col">练字</td>
-                    <td class="duration-col">30min</td>
-                    <td class="tips-col">唐诗3首</td>
-                    <td><div class="checkbox" data-task="writing"></div></td>
-                </tr>
-                <tr>
-                    <td class="task-col">计算</td>
-                    <td class="duration-col">30min</td>
-                    <td class="tips-col">数学计算练习</td>
-                    <td><div class="checkbox" data-task="calculation"></div></td>
-                </tr>
-                <tr>
-                <td class="task-col">读民间故事</td>
+                <td class="task-col">人物故事（睡前）</td>
 <td class="duration-col">30min</td>
-<td class="tips-col"><a href="https://sandy-long.github.io/learn-Cornell-note/" class="draw-link">4个小故事</a></td>
+<td class="tips-col"><a href="https://sandy-long.github.io/learn-Cornell-note/" class="draw-link">一本小书</a></td>
 <td><div class="checkbox" data-task="folk-tales"></div></td>
                 </tr>
             </tbody>
@@ -504,3 +486,4 @@
     </script>
 </body>
 </html>
+
